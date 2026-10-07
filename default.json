@@ -1,0 +1,42 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Règles de mises à jour communes Ergalo",
+  "extends": ["config:recommended", ":pinDevDependencies", "docker:pinDigests"],
+  "timezone": "Europe/Paris",
+  "labels": ["dépendances"],
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 10,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "schedule": ["before 7am on monday"]
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["sécurité"],
+    "schedule": ["at any time"],
+    "automerge": true
+  },
+  "osvVulnerabilityAlerts": true,
+  "packageRules": [
+    {
+      "description": "Correctifs et mineures : fusion automatique si la CI est verte",
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Majeures : regroupées, proposées en début de mois, jamais fusionnées seules",
+      "matchUpdateTypes": ["major"],
+      "groupName": "majeures du mois",
+      "schedule": ["* 0-6 1-7 * *"],
+      "automerge": false
+    },
+    {
+      "description": "Next.js et React : correctifs de sécurité traités tout de suite",
+      "matchPackageNames": ["next", "react", "react-dom"],
+      "matchUpdateTypes": ["patch"],
+      "schedule": ["at any time"],
+      "automerge": true
+    }
+  ]
+}
